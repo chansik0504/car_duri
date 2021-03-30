@@ -23,7 +23,7 @@ class Pure_Pursuit:
         self.ROBOT_SCALE = rospy.get_param('robot_scale', 0.35)
         self.THRESHOLD = rospy.get_param('threshold', 3.0)
         self.GAP_SIZE = rospy.get_param('gap_size', 1)
-        self.FILTER_SCALE = rospy.get_param('filter_scale', 1.1) 
+        self.FILTER_SCALE = rospy.get_param('filter_scale', 1.3) 
         self.GAP_THETA_GAIN = rospy.get_param('gap_theta_gain', 20.0)
         self.REF_THETA_GAIN = rospy.get_param('ref_theta_gain', 1.5)
         
@@ -159,17 +159,6 @@ class Pure_Pursuit:
         f = self.scan_Hi[900]
         g = self.scan_Hi[1079]
 
-        A = 0
-        B = 0
-
-        if d > 20:
-            if  (f*np.sqrt(2) - 0.1 <= e) and (e <= f*np.sqrt(2) + 0.1) and (f*np.sqrt(2) - 0.1 <= g) and (g <= f*np.sqrt(2) + 0.1) and (M < 680):
-                B = 1
-            elif (b*np.sqrt(2) - 0.1 <= c) and (c <= b*np.sqrt(2) + 0.1) and (b*np.sqrt(2) - 0.1 <= a) and (a <= b*np.sqrt(2) + 0.1) and (M < 680):
-                A = 1
-            else:
-                pass
-
 
         if (np.fabs(steering_angle) > self.PI/8):
             speed = self.SPEED_MIN
@@ -206,10 +195,6 @@ class Pure_Pursuit:
                                 accel = 1
 
 
-
-        if (A == 1 or B == 1) and (self.scan_Hi[540] > 4):
-            accel = 12
-            steering = 0
 
 
         self.ackermann_data.drive.steering_angle = steering
